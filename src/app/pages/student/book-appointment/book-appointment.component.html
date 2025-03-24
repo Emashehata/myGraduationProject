@@ -1,1 +1,72 @@
-<p>book-appointment works!</p>
+<section class="my-5">
+  <div class="container shadow-card">
+    <div class="row">
+      <div class="col-md-6 d-flex align-items-center">
+        <div class="w-100">
+          <h3 class="fw-medium header-form">حجز ميعاد:</h3>
+          <span>يرجى إدخال تفاصيل الحجز.</span>
+
+          <form class="mt-4" [formGroup]="addBookingForm">
+            <!-- Select Doctor -->
+            <div class="mb-3">
+              <label for="doctor" class="form-label">اختر الطبيب المراد الحجز معه</label>
+              <select id="doctor" class="w-100 rounded-2 py-1 add-appoint" formControlName="doctorId">
+                <option value="" disabled selected>اختر طبيبك</option>
+                @for (doctor of doctorService.doctorsData(); track doctor.id) {
+                  <option [value]="doctor.id">د/ {{ doctor.firstName }} {{ doctor.lastName }}</option>
+                }
+              </select>
+            </div>
+
+            <!-- Select Appointment Day -->
+            @if (doctorAppointment().length > 0) {
+              <div class="mb-3">
+                <label for="date" class="form-label">اختر اليوم</label>
+                <select id="date" class="w-100 rounded-2 py-1 add-appoint" formControlName="date">
+                  <option value="" disabled selected>اختر يوم الحجز</option>
+                  @for (appoint of doctorAppointment(); track appoint.date) {
+                    <option [value]="appoint.date">{{ appoint.date }} - {{ appoint.day }}</option>
+                  }
+                </select>
+              </div>
+            }
+
+            <!-- Select Available Time Slot (Dynamically Updates) -->
+            @if (addBookingForm.get('date')?.value) {
+              <div class="mb-3">
+                <label for="timeSlot" class="form-label">اختر الوقت المتاح</label>
+                <select id="timeSlot" class="w-100 rounded-2 py-1 add-appoint" formControlName="time">
+                  <option value="" disabled selected>اختر وقت الحجز</option>
+                  @for (appoint of doctorAppointment(); track appoint.date) {
+                    @if (appoint.date === addBookingForm.get('date')?.value) {
+                      @for (slot of appoint.availableSlots; track slot) {
+                        <option [value]="slot">{{ slot }}</option>
+                      }
+                    }
+                  }
+                </select>
+              </div>
+            }
+
+
+
+            <button
+              [disabled]="addBookingForm.invalid"
+              type="submit"
+              class="my-3 bg-sec text-white border-0 w-100 py-2 rounded-2"
+            >
+              حجز الموعد
+              @if (isLoading) {
+                <span><i class="fas fa-spin fa-spinner"></i></span>
+              }
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <img src="/Online calendar.gif" class="w-100 object-fit-contain" alt="" />
+      </div>
+    </div>
+  </div>
+</section>

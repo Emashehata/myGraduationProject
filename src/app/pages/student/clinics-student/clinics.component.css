@@ -1,0 +1,16 @@
+.layer{
+  background: var(--bg-trans);
+  opacity: 0;
+  transition: opacity .3s;
+}
+.card :hover.layer{
+  opacity: 1;
+}
+
+.search:focus {
+  outline: none !important;
+  /* box-shadow: none !important; */
+  border-color: var(--sec-color) !important;
+}
+
+

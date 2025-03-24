@@ -2,8 +2,6 @@
 
 body{
   font-family: "Cairo", serif;
-  font-variant-numeric: traditional;
-  unicode-bidi: embed;
 }
 
 
@@ -11,19 +9,7 @@ body{
   --main-color:#2C2D3F;
   --sec-color:#1A76D1;
   --para-color:#888;
-  --bg-trans:rgba(#1A76D1,#1A76D1,#1A76D1,.8);
-
-
-}
-
-.main-color{
-  color: var(--main-color);
-}
-.sec-color{
-  color: var(--sec-color);
-}
-.bg-sec{
-  background-color: var(--sec-color);
+  --bg-trans: rgba(26, 118, 209, 0.6);
 }
 
 
@@ -37,10 +23,185 @@ a, a:hover, button {
   text-decoration: none;
 }
 
-a, button {
-  transition: all .3s ease;
-  outline: none;
-  box-shadow: none;
+.main-color{
+  color: var(--main-color);
+}
+.sec-color{
+  color: var(--sec-color);
+}
+.para-color{
+  color: var(--para-color);
+}
+.bg-sec{
+  background-color: var(--sec-color);
+}
+.border-color{
+  border-color: var(--sec-color);
 }
 
 
+.form-control ,.form-select{
+  border: none !important;
+  border-bottom: 1px solid #ccc !important; /* Add bottom border */
+  border-radius: 0 !important; /* Remove border radius */
+  box-shadow: none !important; /* Remove focus shadow */
+}
+
+
+button:disabled {
+  background-color: #ccc !important;
+  cursor: not-allowed;
+}
+
+/* table design */
+/* General Table Styling */
+.table {
+  border-collapse: separate;
+  border-spacing: 0;
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+/* Header Styling */
+.table thead {
+  background: #007bff;
+  color: white;
+  font-weight: bold;
+}
+
+/* Row Hover Effect */
+.table-hover tbody tr:hover {
+  background: rgba(0, 123, 255, 0.1);
+  transition: background 0.3s ease-in-out;
+}
+
+/* Image Styling */
+.clinic-img {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 2px solid #ddd;
+  transition: transform 0.3s ease-in-out;
+}
+
+.clinic-img:hover {
+  transform: scale(1.1);
+}
+
+
+
+/***********************user account******************/
+
+.nav-tabs .nav-link.active {
+  background-color: rgba(26, 118, 209,.3) !important; /* #3485D6 with 60% opacity */
+  color: var(--sec-color) !important; /* Keeps text visible */
+}
+
+
+.nav-tabs .nav-item .nav-link.active i {
+  color: var(--sec-color) !important; /* Icon color when active */
+}
+.nav-tabs {
+  border-bottom: none !important; /* Removes the underline */
+}
+
+.discard{
+  border-color: var(--sec-color) !important;
+}
+.account-img span{
+  left: 30%;
+  width: 35px;
+  height: 35px;
+}
+
+.shadow-card{
+  box-shadow: 0px 10px 20px  rgba(54, 148, 241, 0.1);
+}
+
+span.account{
+  color: var(--sec-color);
+  font-size: 14px;
+}
+
+
+
+
+
+.Top
+{
+    background-image: url(/Contact1.jpg);
+    background-size: cover;
+    background-position: 50%;
+    background-repeat: no-repeat;
+    padding: 120px 0;
+}
+
+.overlay
+{
+    z-index: 2;
+    position: relative;
+}
+
+.overlay::before
+{
+    position: absolute;
+    content: "";
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    background: var(--sec-color);
+    opacity: .8;
+    z-index: -10;
+}
+
+.Top h2 {
+    color: #fff;
+    text-transform: capitalize;
+    font-size: 38px;
+    font-weight: 700;
+    margin: 0;
+    padding: 0;
+}
+
+.Top .list {
+    display: inline-block;
+    margin-top: 20px;
+}
+.Top ul li {
+    display: inline-block;
+    position: relative;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 500;
+    text-transform: capitalize;
+}
+.Top ul li a {
+    color: #fff;
+    font-size: 15px;
+    font-weight: 500;
+    text-transform: capitalize;
+    margin: 0;
+    padding: 0;
+}
+.Top ul li a:hover {
+    color: #2c2d3f;
+}
+
+
+
+
+
+
+
+
+.add-appoint{
+  border-color: var(--sec-color) !important;
+}
+
+.add-appoint:focus {
+  outline: none !important;
+  border-color: var(--sec-color) !important;
+}

@@ -1,0 +1,373 @@
+<section class="my-5">
+  <div class="container">
+    <div class="table-responsive">
+      <div
+        id="basicExample_wrapper"
+        class="dataTables_wrapper dt-bootstrap5 no-footer"
+      >
+        <div class="row">
+          <div class="col-sm-12">
+            <table
+              id="basicExample"
+              class="table mt-5 table-hover table-striped align-middle text-center shadow-sm rounded-3 overflow-hidden"
+            >
+              <thead class="text-white">
+                <th class="py-2">اليوم</th>
+                <th class="py-2">بداية الفترة</th>
+                <th class="py-2">نهاية الفترة</th>
+                <th class="py-2">مدة الكشف</th>
+                <th class="py-2">الإجراءت</th>
+              </thead>
+              <tbody>
+                @for (appointment of appointmentsData(); track appointment.id) {
+                <tr>
+                  <td>
+                    @for (day of daysOfWeek; track $index) {
+                    @if(day.value==appointment.day){
+                    {{ day.label }}
+                    } }
+                  </td>
+                  <td>{{ appointment.startTime.slice(0, 5) }}ص</td>
+                  <td>{{ appointment.endTime.slice(0, 5) }}م</td>
+                  <td>{{ appointment.duration }}د</td>
+                  <td class="d-flex justify-content-center">
+                    <button
+                      data-bs-toggle="modal"
+                      [attr.data-bs-target]="
+                        '#deleteAppointmentModal' + appointment.id
+                      "
+                      class="btn btn-outline-danger btn-sm shadow-sm"
+                    >
+                      <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                    <button
+                    (click)="patchValue(appointment)"
+                    data-bs-toggle="modal"
+                    [attr.data-bs-target]="
+                      '#updateAppointmentModal' + appointment.id
+                    "
+                      class="btn btn-outline-success btn-sm shadow-sm ms-3"
+                    >
+                      <i class="fa-regular fa-pen-to-square"></i>
+                    </button>
+                  </td>
+                </tr>
+
+                <!-- delete-appointment-modal.component.html -->
+                <div
+                  class="modal fade"
+                  [id]="'deleteAppointmentModal' + appointment.id"
+                  tabindex="-1"
+                  aria-hidden="true"
+                >
+                  <div class="modal-dialog modal-sm p-0 rounded-3">
+                    <div class="modal-content">
+                      <div class="modal-header bg-danger text-white">
+                        <h5 class="modal-title">حذف الموعد</h5>
+                        <button
+                          type="button"
+                          class="btn-close"
+                          data-bs-dismiss="modal"
+                          aria-label="Close"
+                        ></button>
+                      </div>
+                      <div class="modal-body">
+                        <p>هل أنت متأكد أنك تريد حذف هذا الموعد؟</p>
+                      </div>
+                      <div class="modal-footer">
+                        <button
+                          type="button"
+                          class="btn btn-secondary"
+                          data-bs-dismiss="modal"
+                        >
+                          إلغاء
+                        </button>
+                        <button
+                          data-bs-dismiss="modal"
+                          type="button"
+                          class="btn btn-danger"
+                          (click)="deleteSpecficAppointment(appointment.id)"
+                        >
+                          حذف
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- update appointment-modal -->
+
+                <div
+                class="modal fade"
+                [id]="'updateAppointmentModal' + appointment.id"
+                        tabindex="-1"
+                        aria-hidden="true"
+                      >
+                        <div class="modal-dialog rounded-2">
+                          <div class="modal-content border-0 text-center">
+                            <!-- Close Button (Top Right) -->
+                            <div class="modal-header">
+                              <h1 class="modal-title fs-5" id="exampleModalLabel">
+                                تعديل البيانات الخاصة بحجز ميعاد
+                              </h1>
+                              <button
+                                type="button"
+                                class="btn-close"
+                                data-bs-dismiss="modal"
+                                aria-label="Close"
+                              ></button>
+                            </div>
+                            <form
+                            class="p-3"
+                            [formGroup]="updateAppointmentForm"
+                            (ngSubmit)="submitUpdateAppointment(appointment.id)"
+                          >
+                            <div class="mb-3">
+                              @let dayControl = updateAppointmentForm.get('day');
+                              <label for="dayOfWeek" class="px-0 text-muted"
+                                >اليوم<span class="text-danger">*</span></label
+                              >
+                              <select
+                                class="add-appoint border rounded-2 w-100 mt-2"
+                                [class.is-invalid]="dayControl?.invalid && dayControl?.touched"
+                                [class.is-valid]="dayControl?.valid && dayControl?.touched"
+                                formControlName="day"
+                                id="dayOfWeek"
+                              >
+                                <option value="" disabled selected>اختر اليوم</option>
+                                @for (day of daysOfWeek; track $index) {
+                                <option [value]="day.value">{{ day.label }}</option>
+                                }
+                              </select>
+                              @if (dayControl?.invalid && dayControl?.touched) {
+                              <div class="invalid-feedback">يجب إدخال يوم من أيام الأسبوع</div>
+                              }
+                            </div>
+                            <div class="mb-3">
+                              <label for="startTime" class="px-0 text-muted">
+                                وقت البداية <span class="text-danger">*</span>
+                              </label>
+                              <input
+                                type="time"
+                                class="add-appoint border rounded-2 w-100 mt-2"
+                                id="startTime"
+                                formControlName="startTime"
+                                [class.is-invalid]="
+                                  updateAppointmentForm.get('startTime')?.invalid &&
+                                  updateAppointmentForm.get('startTime')?.touched
+                                "
+                                [class.is-valid]="
+                                  updateAppointmentForm.get('startTime')?.valid &&
+                                  updateAppointmentForm.get('startTime')?.touched
+                                "
+                                required
+                              />
+                              @if (updateAppointmentForm.get('startTime')?.invalid &&
+                              updateAppointmentForm.get('startTime')?.touched) {
+                              <div class="invalid-feedback">يجب إدخال وقت البداية</div>
+                              }
+                            </div>
+                            <div class="mb-3">
+                              <label for="endTime" class="px-0 text-muted">
+                                وقت النهاية <span class="text-danger">*</span>
+                              </label>
+                              <input
+                                type="time"
+                                class="add-appoint border rounded-2 w-100 mt-2"
+                                id="endTime"
+                                formControlName="endTime"
+                                [class.is-invalid]="
+                                  updateAppointmentForm.get('endTime')?.invalid &&
+                                  updateAppointmentForm.get('endTime')?.touched
+                                "
+                                [class.is-valid]="
+                                  updateAppointmentForm.get('endTime')?.valid &&
+                                  updateAppointmentForm.get('endTime')?.touched
+                                "
+                                required
+                              />
+                              @if (updateAppointmentForm.get('endTime')?.invalid &&
+                              updateAppointmentForm.get('endTime')?.touched) {
+                              <div class="invalid-feedback">يجب إدخال وقت النهاية</div>
+                              }
+                            </div>
+
+                            <div class="mb-3">
+                              <label for="duration" class="px-0 text-muted">
+                                مدة الكشف (بالدقائق) <span class="text-danger">*</span>
+                              </label>
+                              <input
+                                type="number"
+                                class="add-appoint border rounded-2 w-100 mt-2"
+                                id="duration"
+                                formControlName="duration"
+                                min="1"
+                                required
+                              />
+                              @if (updateAppointmentForm.get('duration')?.invalid &&
+                              updateAppointmentForm.get('duration')?.touched) {
+                              <div class="invalid-feedback">يجب إدخال مدة الكشف</div>
+                              }
+                            </div>
+
+                            <button
+                              data-bs-dismiss="modal"
+                              type="sumbit"
+                              class="my-3 bg-sec text-white border-0 w-100 py-2 rounded-2"
+                            >
+                              حفظ التعديلات@if (isLoading) {
+                              <span><i class="fas fa-spin fa-spinner"></i></span>
+                              }
+                            </button>
+                          </form>
+
+                          </div>
+                        </div>
+                      </div>
+
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button
+      data-bs-toggle="modal"
+      data-bs-target="#exampleModal"
+      class="bg-sec text-white border-0 py-2 px-3 rounded-2 mt-4 d-block m-auto"
+    >
+      <i class="fa-solid fa-plus"></i> إنشاء ميعاد جديد
+    </button>
+  </div>
+</section>
+
+<!-- modal form for add appointment -->
+
+<div
+  class="modal fade"
+  id="exampleModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">
+          إضافة ميعاد جديد
+        </h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <form
+        class="p-3"
+        [formGroup]="addAppointmentForm"
+        (ngSubmit)="submitAddAppointmentForm()"
+      >
+        <div class="mb-3">
+          @let dayControl = addAppointmentForm.get('day');
+          <label for="dayOfWeek" class="px-0 text-muted"
+            >اليوم<span class="text-danger">*</span></label
+          >
+          <select
+            class="add-appoint border rounded-2 w-100 mt-2"
+            [class.is-invalid]="dayControl?.invalid && dayControl?.touched"
+            [class.is-valid]="dayControl?.valid && dayControl?.touched"
+            formControlName="day"
+            id="dayOfWeek"
+          >
+            <option value="" disabled selected>اختر اليوم</option>
+            @for (day of daysOfWeek; track $index) {
+            <option [value]="day.value">{{ day.label }}</option>
+            }
+          </select>
+          @if (dayControl?.invalid && dayControl?.touched) {
+          <div class="invalid-feedback">يجب إدخال يوم من أيام الأسبوع</div>
+          }
+        </div>
+        <div class="mb-3">
+          <label for="startTime" class="px-0 text-muted">
+            وقت البداية <span class="text-danger">*</span>
+          </label>
+          <input
+            type="time"
+            class="add-appoint border rounded-2 w-100 mt-2"
+            id="startTime"
+            formControlName="startTime"
+            [class.is-invalid]="
+              addAppointmentForm.get('startTime')?.invalid &&
+              addAppointmentForm.get('startTime')?.touched
+            "
+            [class.is-valid]="
+              addAppointmentForm.get('startTime')?.valid &&
+              addAppointmentForm.get('startTime')?.touched
+            "
+            required
+          />
+          @if (addAppointmentForm.get('startTime')?.invalid &&
+          addAppointmentForm.get('startTime')?.touched) {
+          <div class="invalid-feedback">يجب إدخال وقت البداية</div>
+          }
+        </div>
+        <div class="mb-3">
+          <label for="endTime" class="px-0 text-muted">
+            وقت النهاية <span class="text-danger">*</span>
+          </label>
+          <input
+            type="time"
+            class="add-appoint border rounded-2 w-100 mt-2"
+            id="endTime"
+            formControlName="endTime"
+            [class.is-invalid]="
+              addAppointmentForm.get('endTime')?.invalid &&
+              addAppointmentForm.get('endTime')?.touched
+            "
+            [class.is-valid]="
+              addAppointmentForm.get('endTime')?.valid &&
+              addAppointmentForm.get('endTime')?.touched
+            "
+            required
+          />
+          @if (addAppointmentForm.get('endTime')?.invalid &&
+          addAppointmentForm.get('endTime')?.touched) {
+          <div class="invalid-feedback">يجب إدخال وقت النهاية</div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label for="duration" class="px-0 text-muted">
+            مدة الكشف (بالدقائق) <span class="text-danger">*</span>
+          </label>
+          <input
+            type="number"
+            class="add-appoint border rounded-2 w-100 mt-2"
+            id="duration"
+            formControlName="duration"
+            min="1"
+            required
+          />
+          @if (addAppointmentForm.get('duration')?.invalid &&
+          addAppointmentForm.get('duration')?.touched) {
+          <div class="invalid-feedback">يجب إدخال مدة الكشف</div>
+          }
+        </div>
+
+        <button
+          data-bs-dismiss="modal"
+          [disabled]="addAppointmentForm.invalid"
+          type="sumbit"
+          class="my-3 bg-sec text-white border-0 w-100 py-2 rounded-2"
+        >
+          إضافة ميعاد @if (isLoading) {
+          <span><i class="fas fa-spin fa-spinner"></i></span>
+          }
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

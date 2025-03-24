@@ -1,0 +1,60 @@
+<section class="my-5">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-5">
+        <div class="doctor-details-left shadow-card rounded-2 p-3">
+          <img [src]="'https://myclinicapp.runasp.net'+doctorData()?.imageUrl" alt="" class="w-100 rounded-2">
+          <div class="doctor-details-contact mt-3">
+            <h4>معلومات التواصل</h4>
+            <ul class="basic-info my-2">
+              <li>
+              <span class="ms-2">{{doctorData()?.phoneNumber}}</span>
+              <span><i class="icofont-ui-call sec-color fs-5"></i></span>
+              </li>
+              <li class="mt-2">
+                <span class="ms-2">{{doctorData()?.email}}</span>
+                <span><i class="icofont-ui-message sec-color fs-5"></i></span>
+              </li>
+            </ul>
+              <div class="doctor-details-work mt-3">
+                <h4>المواعيد المتاحة</h4>
+                <ul class="time-sidual">
+                  @for (appoint of doctorAppointment(); track $index) {
+                    @if(appoint.availableSlots.length>0){
+                      <li class="day">
+                        <!-- {{appoint.date}} -->
+                        <span>{{appoint.day}}</span>
+                        <span class="ms-3">{{appoint.availableSlots[0]}} - {{appoint.availableSlots.at(-1) }}</span>
+                      </li>
+                    }
+                  }
+                </ul>
+              </div>
+            </div>
+          </div>
+      </div>
+      <div class="col-lg-7">
+        <div class="doctor-details-item">
+          <div class="doctor-details-right">
+            <div class="doctor-name">
+              <h3 class="name">د/
+                {{doctorData()?.firstName}} {{doctorData()?.lastName}}
+              </h3>
+              <p class="deg">{{doctorData()?.specialty}}</p>
+              <p>{{doctorData()?.college}}</p>
+            </div>
+            <div class="doctor-details-biography">
+              <h3 class="sec-color">السيرة الذاتية</h3>
+              <p>{{doctorData()?.description}}</p>
+            </div>
+            <div>
+              <button [routerLink]="['/book appointment',doctorData()?.id]"
+              class="bg-sec rounded-2 w-100 py-2 text-white border-0">احجز الأن</button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

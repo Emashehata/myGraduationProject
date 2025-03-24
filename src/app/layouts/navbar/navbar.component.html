@@ -1,7 +1,74 @@
+
+<div class="topbar border-bottom py-2">
+  <div class="container">
+    <div class="row d-flex align-items-center flex-wrap">
+      <div class="col-lg-6 col-md-5 col-12">
+        <ul class="top-link d-flex align-items-center flex-wrap">
+          @if (!authService.isLogin()) {
+
+            <li  class="my-2">
+              <a class="text-black" type="button" routerLink="/register">إنشاء حساب</a>
+              <a class="text-black ms-4" type="button" routerLink="/login">تسجيل الدخول</a>
+            </li>
+          }
+          @else {
+
+            @if(authService.isDoctor()){
+
+              <li class="nav-item dropdown">
+                <a class="nav-link  main-color" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  <img [src]="'https://myclinicapp.runasp.net'+ doctorImg " class="profile-img rounded-circle" alt="">
+                  <span class="me-3 ms-2">{{ firstName }} {{ lastName }}</span>
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" routerLink="/doctorAccount"><i class="icofont-doctor fs-5 me-2"></i> حسابي</a></li>
+                  <li><a class="dropdown-item" href="#">Another action</a></li>
+                  <li><a class="dropdown-item" href="#">Something else here</a></li>
+                </ul>
+              </li>
+
+            }
+            @if(authService.isUser()){
+
+              <li class="nav-item dropdown">
+                <a class="nav-link  main-color" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  <img [src]="'https://myclinicapp.runasp.net' + patientImg" class="profile-img rounded-circle" alt="">
+                  <span class="me-3 ms-2">{{ patientFirstName }} {{ patientLastName }}</span>
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" routerLink="/patientAccount"><i class="icofont-doctor fs-5 me-2"></i> حسابي</a></li>
+                  <li><a class="dropdown-item" href="#">Another action</a></li>
+                  <li><a class="dropdown-item" href="#">Something else here</a></li>
+                </ul>
+              </li>
+
+            }
+            <li>
+              <a (click)="authService.logOut()" type="button">تسجيل الخروج</a>
+            </li>
+
+          }
+
+          </ul>
+          </div>
+          <div class="col-lg-6 col-md-7 col-12">
+            <ul class="top-contact d-flex align-items-center flex-wrap">
+              <li class="me-4">
+                <i class="fa fa-phone sec-color me-2"></i>+ 0403455670</li>
+              <li>
+                <i class="fa fa-envelope sec-color me-2"></i>
+                 <a href="Studenthealthcare@unv.tanta.edu.eg" class="main-color">{{medicalEmail}}</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
 <nav
- class="navbar navbar-expand-lg bg-white mt-0 position-sticky top-0
- shadow">
-  <div class="container mt-0">
+ class="navbar navbar-expand-lg bg-white mt-1 sticky-top shadow-card
+ ">
+  <div class="container">
     <a class="navbar-brand fw-bold fs-3" routerLink="home">
       <img src="/logo4.svg" class="me-2" alt="">
       <span class="sec-color">الإدارة </span>
@@ -20,33 +87,36 @@
       <div class="offcanvas-body">
         <ul class="navbar-nav m-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link main-color" aria-current="page" routerLink="home" routerLinkActive="sec-color text-decoration-underline">الرئيسية</a>
+            <a class="nav-link main-color" aria-current="page" routerLink="home" routerLinkActive="active">الرئيسية</a>
           </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle main-color" routerLink="clinics-student" routerLinkActive="sec-color text-decoration-underline" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              العيادات
-            </a>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">Action</a></li>
-              <li><a class="dropdown-item" href="#">Another action</a></li>
-              <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="#">Something else here</a></li>
-            </ul>
+
+          <li class="nav-item">
+            <a class="nav-link main-color" routerLink="news" routerLinkActive="active">الأخبار</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link main-color" routerLink="news" routerLinkActive="sec-color text-decoration-underline">الأخبار</a>
+            <a class="nav-link main-color" routerLink="clinics-student" routerLinkActive="active">العيادات</a>
+          </li>
+          @if (authService.isUser()) {
+            <li class="nav-item">
+              <a class="nav-link main-color" routerLink="appointment-student" routerLinkActive="active">المواعيد</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link main-color" routerLink="medical-record" routerLinkActive="active">السجل الطبي</a>
+            </li>
+          }
+          @if (authService.isDoctor()) {
+            <li class="nav-item">
+              <a class="nav-link main-color" routerLink="appointment-doctor" routerLinkActive="active">المواعيد</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link main-color" routerLink="booking-doctor" routerLinkActive="active">الحجوزات</a>
+            </li>
+          }
+          <li class="nav-item">
+            <a class="nav-link main-color" routerLink="about us" routerLinkActive="active">من نحن</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link main-color" routerLink="appointment-student" routerLinkActive="sec-color text-decoration-underline">المواعيد</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link main-color" routerLink="medical-record" routerLinkActive="sec-color text-decoration-underline">السجل الطبي</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link main-color" routerLink="about us" routerLinkActive="sec-color text-decoration-underline">من نحن</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link main-color" routerLink="contact us" routerLinkActive="sec-color text-decoration-underline">تواصل معنا</a>
+            <a class="nav-link main-color" routerLink="contact us" routerLinkActive="active">تواصل معنا</a>
           </li>
         </ul>
         <a class="btn btn-nav rounded-1 px-4 text-white bg-sec position-relative" routerLink="book appointment" role="button">
