@@ -15,7 +15,7 @@ export class BookingService {
     return this.httpClient.post(`${environment.baseUrl}api/Booking`,data);
   }
   deleteBooking(id:string):Observable<any>{
-    return this.httpClient.delete(`${environment.baseUrl}api/Booking/${id}`);
+    return this.httpClient.delete(`${environment.baseUrl}api/Booking/DeleteBooking/${id}`);
   }
 
   getPatientBooking():Observable<any>{

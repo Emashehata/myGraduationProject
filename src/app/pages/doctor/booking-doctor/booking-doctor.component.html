@@ -1,1 +1,92 @@
-<p>booking-doctor works!</p>
+<section class="my-5">
+  <div class="container">
+    <div class="table-responsive">
+      <div
+        id="basicExample_wrapper"
+        class="dataTables_wrapper dt-bootstrap5 no-footer"
+      >
+        <div class="row">
+          <div class="col-sm-12">
+            <table
+              id="basicExample"
+              class="table mt-5 table-hover table-striped align-middle text-center shadow-sm rounded-3 overflow-hidden"
+            >
+              <thead class="text-white">
+                <th class="py-2">اسم المريض</th>
+                <th class="py-2">التاريخ</th>
+                <th class="py-2">الميعاد</th>
+                <th class="py-2">الإجراءت</th>
+              </thead>
+              <tbody>
+                @for (booking of bookingDoctors(); track booking.id) {
+                <tr>
+                  <td>
+                    {{booking.patientFirstName + ' '+ booking.patientLastName}}
+                  </td>
+                  <td>{{booking.date}}</td>
+                  <td>{{booking.time}}</td>
+                  <td class="d-flex justify-content-center">
+                    <button
+                      data-bs-toggle="modal"
+                      [attr.data-bs-target]="
+                        '#deleteBookingModal' + booking.id
+                      "
+                      class="btn btn-outline-danger btn-sm shadow-sm"
+                    >
+                      <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                  </td>
+                </tr>
+
+                <!-- delete-appointment-modal.component.html -->
+                <div
+                  class="modal fade"
+                  [id]="'deleteBookingModal' + booking.id"
+                  tabindex="-1"
+                  aria-hidden="true"
+                >
+                  <div class="modal-dialog modal-sm p-0 rounded-3">
+                    <div class="modal-content">
+                      <div class="modal-header bg-danger text-white">
+                        <h5 class="modal-title">حذف الموعد</h5>
+                        <button
+                          type="button"
+                          class="btn-close"
+                          data-bs-dismiss="modal"
+                          aria-label="Close"
+                        ></button>
+                      </div>
+                      <div class="modal-body">
+                        <p>هل أنت متأكد أنك تريد حذف هذا الموعد؟</p>
+                      </div>
+                      <div class="modal-footer">
+                        <button
+                          type="button"
+                          class="btn btn-secondary"
+                          data-bs-dismiss="modal"
+                        >
+                          إلغاء
+                        </button>
+                        <button
+                          data-bs-dismiss="modal"
+                          type="button"
+                          class="btn btn-danger"
+                          (click)="deleteSpecficBooking(booking.id)"
+                        >
+                          حذف
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>

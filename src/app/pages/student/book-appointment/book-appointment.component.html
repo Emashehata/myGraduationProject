@@ -6,7 +6,7 @@
           <h3 class="fw-medium header-form">حجز ميعاد:</h3>
           <span>يرجى إدخال تفاصيل الحجز.</span>
 
-          <form class="mt-4" [formGroup]="addBookingForm">
+          <form class="mt-4" [formGroup]="addBookingForm" (ngSubmit)="sumbitBookingForm()">
             <!-- Select Doctor -->
             <div class="mb-3">
               <label for="doctor" class="form-label">اختر الطبيب المراد الحجز معه</label>
@@ -25,7 +25,9 @@
                 <select id="date" class="w-100 rounded-2 py-1 add-appoint" formControlName="date">
                   <option value="" disabled selected>اختر يوم الحجز</option>
                   @for (appoint of doctorAppointment(); track appoint.date) {
-                    <option [value]="appoint.date">{{ appoint.date }} - {{ appoint.day }}</option>
+                    @if(appoint.availableSlots.length>0){
+                      <option [value]="appoint.date">{{ appoint.date }}  {{ appoint.day }}</option>
+                    }
                   }
                 </select>
               </div>

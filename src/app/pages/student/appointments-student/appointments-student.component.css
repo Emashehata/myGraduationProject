@@ -1,0 +1,19 @@
+.card{
+  border-color: #87c0f8 !important;
+  box-shadow: 0px 10px 20px  rgba(141, 193, 245, 0.2);
+}
+button.delete{
+  border-color: #87c0f8 !important;
+}
+.bg-sec:hover,
+.bg-sec:active,
+.bg-sec:focus {
+  background-color: var(--sec-color) !important;
+  opacity: 1 !important;
+  box-shadow: none !important;
+  filter: none !important;
+}
+
+.sec-color:hover{
+  color: var(--sec-color) !important;
+}

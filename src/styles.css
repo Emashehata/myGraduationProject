@@ -197,7 +197,7 @@ span.account{
 
 
 
-.add-appoint{
+.add-appoint,input.add-appoint{
   border-color: var(--sec-color) !important;
 }
 

@@ -1,10 +1,12 @@
-import { Component, inject, signal, WritableSignal } from '@angular/core';
+import { BookingService } from './../../../core/services/booking/booking.service';
+ import { Component, inject, signal, WritableSignal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { AppointmentsService } from '../../../core/services/appointments/appointments.service';
 import { DoctorService } from '../../../core/services/doctor/doctor.service';
 import { IAvailableslots } from '../../../core/interfaces/IAvaliableslots/iavailableslots';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-book-appointment',
@@ -16,7 +18,9 @@ export class BookAppointmentComponent {
   private readonly formBuilder= inject(FormBuilder);
   private readonly toastrService = inject(ToastrService);
   private readonly appointmentsService=inject(AppointmentsService);
+  private readonly bookingService=inject(BookingService);
   private readonly activatedRoute=inject(ActivatedRoute);
+  private readonly router=inject(Router);
   readonly doctorService=inject(DoctorService);
   doctorAppointment:WritableSignal<IAvailableslots[]>=signal([]);
   isLoading:boolean=false;
@@ -62,5 +66,32 @@ export class BookAppointmentComponent {
         }
       })
     }
+
+    sumbitBookingForm():void{
+        if(this.addBookingForm.valid){
+          this.isLoading=true;
+          this.bookingService.createBooking(this.addBookingForm.value).pipe(finalize(() => this.isLoading = false)).subscribe({
+            next: (res) => {
+              console.log(res);
+                if(res.success==true){
+                  setTimeout(() => {
+                    this.toastrService.success(res.message);
+                    this.router.navigate(['/home']);
+                  }, 500);
+                }
+
+
+              this.isLoading=false;
+            },
+            error:(err)=>{
+              this.toastrService.error(err.error.message)
+            }
+          })
+        }
+        else{
+          this.addBookingForm.markAllAsTouched();
+        }
+
+      }
 }
 
